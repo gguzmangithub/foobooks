@@ -14,8 +14,9 @@ class BookController extends Controller {
     /**
     * Responds to requests to GET /books
     */
-    public function getIndex() {
-        return 'List all the books';
+    public function getIndex(Request $request) {
+        // return 'List all the books';
+        return view('books.index');
     }
 
     /**
@@ -45,10 +46,27 @@ public function getCreate() {
 
       $this->validate(
         $request,
-        ['title' => 'required|min:2',
+        [
+          'title' => 'required|min:5',
+          'author' => 'required|min:5',
+          'cover' => 'required|url',
+          'published' => 'required|min:4',
         ]
       );
+
+      // Code here to enter book into the database
+        $book = new \App\Book();
+        $book->title = $request->title;
+        $book->author = $request->author;
+        $book->author_id = 1;
+        $book->cover = $request->cover;
+        $book->published = $request->published;
+        $book->purchase_link = $request->purchase_link;
+//code below adds new row to database
+        $book->save();
+
         // return 'Process adding new book'.$_POST['title'];
-        return 'Process adding new book: '.$request->input('title');
+        //gg return 'Process adding new book: '.$request->input('title');
+        return redirect('/books');
     }
 }

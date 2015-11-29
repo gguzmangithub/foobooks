@@ -26,13 +26,21 @@ Route::get('/books/show/{title?}', 'BookController@getShow');
 Route::get('/books/create', 'BookController@getCreate');
 Route::post('/books/create', 'BookController@postCreate');
 
+Route::controller('/practice','PracticeController');
+
 // Implicit route Controller
 // The line below could replace the four lines above
 //Route::controller('/books','BookController');
 
 //log route
-Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
-
+if(App::environment('local')) {
+  Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+  Route::get('/drop', function() {
+        DB::statement('DROP database foobooks');
+        DB::statement('CREATE database foobooks');
+        return 'Dropped foobooks; created foobooks.';
+    });
+};
 
 //this is in case things get messed upc in the environment
 
